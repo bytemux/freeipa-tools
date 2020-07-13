@@ -19,6 +19,7 @@ Everything is tested with Freeipa 4.6.5, Centos 7
   - gitlab (this is the most generic example - most of stuff applies to every other OSS if they follow conventional design)
   - proxmox
   - seafile
+- **import**. Generate users and groups from csv. Send user credentials via Slack private messages
 
 ## What this repo lacks, but you might want for your deployment
 - Tested HAproxy/Nginx configs to balance incoming ldap traffic

@@ -1,0 +1,56 @@
+# Usage:
+# Change hostname, join IPA
+# ansible-playbook -i ./env/support/hosts.ini ./plays/ipa/uninstall_client.yaml
+# Don't change hostname, join IPA
+# ansible-playbook -i ./env/support/hosts.ini ./plays/ipa/uninstall_client.yaml -e "preserve_hostname=yes"
+
+- name: Playbook to configure IPA clients with username/password
+  hosts: all, ipaclients_install
+  become: true
+  vars_files:
+    - "{{ inventory_dir }}/secrets.yaml"
+
+  pre_tasks:
+  - name: Change hostname to ipadomain
+    hostname:
+      name: "{{ inventory_hostname }}.{{domain}}"
+    when: preserve_hostname is not defined
+
+  # - name: Fail if selinux is DISABLED
+  #   fail:
+  #     msg: "WARNING: selinux is DISABLED. Please set to at least enabled:permissive"
+  #   when: ansible_selinux.status == "disabled"
+
+  collections:
+    - freeipa.ansible_freeipa   # ansible-galaxy collection install freeipa.ansible_freeipa:0.1.8-1
+
+  roles:
+  - role: ipaclient
+    state: present
+
+  tasks:
+  - name: Set sshd AuthorizedKeysCommandUser for ipa-client
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      state: present
+      regexp: ^#AuthorizedKeysCommandUser
+      line: AuthorizedKeysCommandUser nobody
+      backup: yes
+    notify:
+      - restart sshd
+
+  - name: Set sshd AuthorizedKeysCommand for ipa-client
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      state: present
+      regexp: ^#AuthorizedKeysCommand
+      line: AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys
+      backup: yes
+    notify:
+      - restart sshd
+
+  handlers:
+  - name: restart sshd
+    service:
+      name: sshd
+      state: restarted

@@ -1,0 +1,31 @@
+# FreeIPA LDAPS
+# https://docs.openshift.com/container-platform/3.11/install_config/configuring_authentication.html#identity-providers_parameters
+# oauthConfig:
+#   identityProviders:
+  - name: "ldap"
+    challenge: true
+    login: true
+    mappingMethod: claim
+    provider:
+      apiVersion: v1
+      kind: LDAPPasswordIdentityProvider
+      attributes:
+        id:
+        - dn
+        email:
+        - mail
+        name:
+        - displayName
+        preferredUsername:
+        - uid
+      bindDN: "uid=binduser,cn=users,cn=accounts,dc=int,dc=domainname,dc=com"
+      bindPassword: "INSERT_PASSWORD"
+      ca: ldap-ca.crt
+      insecure: false
+      # ldap://host:port/basedn?attribute?scope?filter
+      # ldap://ldap.example.com/o=Acme?cn?sub?(enabled=true)
+      url: "ldaps://ipa-01.int.domainname.com:636/cn=users,cn=accounts,dc=int,dc=domainname,dc=com?uid?sub?(&(objectClass=inetOrgPerson)(memberOf=cn=it-department,cn=groups,cn=accounts,dc=int,dc=domainname,dc=com))"
+      # Debug
+      #insecure: true
+      #url: "ldap://ldap-01.domainname.com:389/dc=domainname,dc=com"
+#

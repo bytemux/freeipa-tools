@@ -1,0 +1,24 @@
+main:
+  label: 'LDAP'
+  host: 'ipa-01.int.domainname.com'
+  port: 636
+  uid: 'uid'
+  # LDAPS
+  encryption: 'simple_tls' # for ldap set 'plain'
+  verify_certificates: true
+  tls_options:
+    ca_file: '/etc/gitlab/ldap-ca.crt'
+  bind_dn: 'uid=binduser,cn=users,cn=accounts,dc=int,dc=domainname,dc=com'
+  password: 'INSERT_PASSWORD'
+  base: 'cn=users,cn=accounts,dc=int,dc=domainname,dc=com'
+  active_directory: false
+  attributes:
+    username: ['uid']
+    email: ['mail']
+    name: 'displayName'
+    first_name: 'givenName'
+    last_name: 'sn'
+  user_filter: '(&(objectClass=inetOrgPerson)(memberOf=cn=it-department,cn=groups,cn=accounts,dc=int,dc=domainname,dc=com))'
+# only available in GitLab EE
+  group_base: 'cn=groups,cn=accounts,dc=int,dc=domainname,dc=com'
+  admin_group: 'gitlab-admins'

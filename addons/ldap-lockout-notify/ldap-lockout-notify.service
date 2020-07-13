@@ -1,0 +1,12 @@
+[Unit]
+Description=FreeIPA account lockout notification
+After=network.target
+
+[Service]
+User=ldap-lockout-notify
+Restart=always
+RestartSec=180
+ExecStart=/bin/bash -c "/opt/ldap-lockout-notify/ldap-lockout-notify.sh >> /var/log/ldap-lockout-notify/ldap-lockout-notify.log"
+
+[Install]
+WantedBy=multi-user.target

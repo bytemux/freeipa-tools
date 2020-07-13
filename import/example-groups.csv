@@ -1,0 +1,6 @@
+it-department;;no
+all-services;All service accounts. Password does not expire;no
+all-employees;All employees. Password expires;no
+okd-cluster1-view;oc adm policy add-role-to-group view -n;no
+okd-cluster1-edit;oc adm policy add-role-to-group edit -n;no
+okd-cluster1-clusteradmin;oc adm policy add-role-to-group cluster-admin;no

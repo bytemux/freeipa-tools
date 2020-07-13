@@ -1,0 +1,18 @@
+# ansible_host postfix
+domain: int.domainname.com
+
+# ipadomain scope
+ipaadmin_principal: hostadmin
+#ipaadmin_password: "" # check secrets.yaml
+ipaserver_domain: "{{ domain }}"
+ipaserver_realm: "{{ domain|upper }}"
+
+# ipaclients scope https://github.com/freeipa/ansible-freeipa/blob/master/roles/ipaclient/README.md
+## don't modify /etc/ssh/sshd_config
+ipaclient_no_sshd: yes
+## equivalent of ipa-client-install --enable-dns-updates
+ipasssd_enable_dns_updates: yes
+## override ipaservers for ipaclient module, because FQDN is required
+ipaclient_servers:
+  - ipa-01.int.domainname.com
+  - ipa-02.int.domainname.com

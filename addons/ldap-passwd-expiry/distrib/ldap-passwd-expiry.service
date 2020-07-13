@@ -1,0 +1,12 @@
+[Unit]
+Description=FreeIPA password expiration notification
+After=network.target
+
+[Service]
+User=root
+Restart=always
+RestartSec=86400
+ExecStart=/opt/ldap-passwd-expiry/virtualenv/bin/python /opt/ldap-passwd-expiry/notifier.py
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,26 @@
+kind: LDAPSyncConfig
+apiVersion: v1
+url: ldaps://ipa-01.int.domainname.com:636
+insecure: false
+bindDN: "uid=binduser,cn=users,cn=accounts,dc=int,dc=domainname,dc=com"
+bindPassword: "INSERT_PASSWORD"
+ca: "ldap-ca.crt"
+rfc2307:
+    groupsQuery:
+        baseDN: "cn=groups,cn=accounts,dc=int,dc=domainname,dc=com"
+        scope: "sub"
+        derefAliases: "never"
+        filter: "(&(objectClass=ipausergroup)(memberOf=cn=okd-test-all,cn=groups,cn=accounts,dc=int,dc=domainname,dc=com))"
+        pageSize: 0
+    groupUIDAttribute: "dn"
+    groupNameAttributes: ["cn"]
+    groupMembershipAttributes: ["member"]
+    usersQuery:
+        baseDN: "cn=users,cn=accounts,dc=int,dc=domainname,dc=com"
+        scope: "sub"
+        derefAliases: "never"
+        pageSize: 0
+    userNameAttributes: ["uid"]
+    userUIDAttribute: "dn"
+    tolerateMemberNotFoundErrors: true
+    tolerateMemberOutOfScopeErrors: true

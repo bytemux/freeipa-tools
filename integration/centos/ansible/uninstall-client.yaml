@@ -1,0 +1,56 @@
+- name: Playbook to unconfigure IPA clients
+  hosts: all, ipaclients_remove
+  become: true
+  collections:
+    - freeipa.ansible_freeipa   # ansible-galaxy collection install freeipa.ansible_freeipa:0.1.8-1
+
+  roles:
+  - role: ipaclient
+    state: absent
+
+  tasks:
+  - name: Restore sshd AuthorizedKeysCommandUser default
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      state: present
+      regexp: ^AuthorizedKeysCommandUser nobody
+      line: "#AuthorizedKeysCommandUser nobody"
+      backup: yes
+    notify:
+      - restart sshd
+
+  - name: Restore sshd AuthorizedKeysCommand default
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      state: present
+      regexp: ^AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys
+      line: "#AuthorizedKeysCommand none"
+      backup: yes
+    notify:
+      - restart sshd
+
+  handlers:
+  - name: restart sshd
+    service:
+      name: sshd
+      state: restarted
+
+- name: Playbook to handle IPA host entities
+  hosts: "{{ groups['ipaservers'] | random }}" # run on random host from ipaservers. Also: ipaservers[0]
+  become: true
+
+  vars_files:
+    - "{{ inventory_dir }}/secrets.yaml"
+
+  collections:
+    - freeipa.ansible_freeipa   # ansible-galaxy collection install freeipa.ansible_freeipa:0.1.8-1
+
+  tasks:
+  - name: Ensure host is absent
+    ipahost:
+      ipaadmin_principal: "{{ ipaadmin_principal }}"
+      ipaadmin_password: "{{ ipaadmin_password }}"
+      name: "{{ item }}.{{ ipaserver_domain }}"
+      state: absent
+      update_dns: yes
+    loop: "{{ groups['ipaclients_remove'] }}"
