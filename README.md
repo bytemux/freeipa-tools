@@ -12,6 +12,7 @@ Everything is tested with Freeipa 4.6.5, Centos 7
   - **ipa-ssl-renew.sh**. Setup Let's encrypt with FreeIPA and add script to cron to renew certs
   - **local_backup.sh**. Backup FreeIPA master server to local storage
 - **deploy**. Manual deploy folder for getting familiar with FreeIPA, for full production deployments i suggest use of https://github.com/freeipa/ansible-freeipa
+  - **ipa-node-prepare.sh**. Set some settings that are not replicated and harden security.
 - **integrations**. Examples configs for integration of LDAP server with all kinds of OSS products. Most notable include:
   - centos (sssd ssh + sudo via ipaclient)
   - openshift
