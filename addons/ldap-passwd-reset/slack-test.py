@@ -41,7 +41,7 @@ class Slack():
 
 options = {
             # In template {0} will replaced with token
-            "msg_template": "*[int.domainname.com]* Ваш код для сброса пароля LDAP: {0} \nНикому не сообщайте его.",
+            "msg_template": "*[int.domainname.com]* Your reset password token: {0} \nDo not tell anyone this code.",
             # Set the webhook_url to the one provided by Slack when you create the webhook at https://my.slack.com/services/new/incoming-webhook/
             "slack_hook" : "https://hooks.slack.com/services/INSERT_PASSWORD",
             "slack_username" : "announce",

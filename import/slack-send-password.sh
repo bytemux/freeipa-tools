@@ -15,7 +15,7 @@ do
   o_count=$((o_count+1))
   echo -e "Progress: $o_count/$o_total" >> progress.log
   # LIST
-  echo -en "\n*Логин:* $login\n*Пароль:* $password"
+  echo -en "\n*Login:* $login\n*Password:* $password"
   #
   if [ $? -eq 1 ]; then o_fails=$((o_fails+1)); fi
 done < $list_name
